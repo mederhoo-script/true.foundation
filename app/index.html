@@ -66,14 +66,9 @@
             </div>
           </div>
           <div class="flex items-center space-x-2">
-            <button class="btn-soon">
-              <span class="text-white/50">Connect Wallet</span>
-              <div class="btn-soon-text-inner">
-                <div class="btn-soon-text-inner-content lg:py-[5px] px-1.5 lg:px-2.5">
-                  <span>⏳ <span class="clip-text">Soon</span></span>
-                </div>
-              </div>
-            </button>
+            <a href="/app/index.html" class="btn-soon">
+              <span class="text-white">Connect Wallet</span>
+            </a>
           </div>
         </div>
       </div>
@@ -145,5 +140,16 @@
       </div>
     </footer>
   </div>
+  <a href="/app/index.html" class="claim-now-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: linear-gradient(135deg, #FA0, #FF6B00); color: white; font-weight: bold; padding: 15px 25px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 20px rgba(255, 170, 0, 0.4); transition: all 0.3s ease; animation: pulse 2s infinite;">CLAIM NOW</a>
+  <style>
+    .claim-now-btn:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 25px rgba(255, 170, 0, 0.6); 
+    } 
+    @keyframes pulse { 
+      0%, 100% { box-shadow: 0 4px 20px rgba(255, 170, 0, 0.4); } 
+      50% { box-shadow: 0 6px 30px rgba(255, 170, 0, 0.8); } 
+    }
+  </style>
 </body>
 </html>
