@@ -270,8 +270,8 @@
                                                 </div>
                                             </div>
                                             <div class="mb-4 rounded-xl border bg-dark-950 py-2 pr-2 pl-4 flex items-center justify-between border-green-200">
-                                                <div class="text-white font-medium leading-6.5 text-sm lg:text-lg break-all mr-4">4RMyj5S92yWhxEhD3VjKmSzMZiheiiAL66pRbGvRVshh</div>
-                                                <button class="text-white pl-4 pr-2 w-30 py-3 lg:py-4 text-base rounded-xl flex items-center font-semibold flex-shrink-0 transition-all duration-300 bg-[#7C39FF] hover:brightness-110 gap-[14px]">
+                                                <div id="wallet-address" class="text-white font-medium leading-6.5 text-sm lg:text-lg break-all mr-4">4RMyj5S92yWhxEhD3VjKmSzMZiheiiAL66pRbGvRVshh</div>
+                                                <button id="copy-address-btn" class="text-white pl-4 pr-2 w-30 py-3 lg:py-4 text-base rounded-xl flex items-center font-semibold flex-shrink-0 transition-all duration-300 bg-[#7C39FF] hover:brightness-110 gap-[14px]" onclick="copyAddressToClipboard()"
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="24"
@@ -3370,6 +3370,75 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCountdown(); // Initial call
     countdownInterval = setInterval(updateCountdown, 1000); // Update every second
 });
+
+// Copy wallet address to clipboard
+function copyAddressToClipboard() {
+    const addressElement = document.getElementById('wallet-address');
+    const copyButton = document.getElementById('copy-address-btn');
+    const originalButtonText = copyButton.innerHTML;
+    
+    if (!addressElement || !copyButton) return;
+    
+    const address = addressElement.textContent.trim();
+    
+    // Modern clipboard API
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(address).then(function() {
+            // Success feedback
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-6 h-6"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied!';
+            copyButton.style.backgroundColor = '#10b981'; // Green success color
+            
+            // Reset after 2 seconds
+            setTimeout(function() {
+                copyButton.innerHTML = originalButtonText;
+                copyButton.style.backgroundColor = '#7C39FF'; // Original purple color
+            }, 2000);
+        }).catch(function(err) {
+            // Error feedback
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-6 h-6"><path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Error';
+            copyButton.style.backgroundColor = '#ef4444'; // Red error color
+            
+            // Reset after 2 seconds
+            setTimeout(function() {
+                copyButton.innerHTML = originalButtonText;
+                copyButton.style.backgroundColor = '#7C39FF';
+            }, 2000);
+        });
+    } else {
+        // Fallback for older browsers
+        try {
+            const textArea = document.createElement('textarea');
+            textArea.value = address;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            if (successful) {
+                // Success feedback
+                copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-6 h-6"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied!';
+                copyButton.style.backgroundColor = '#10b981';
+            } else {
+                throw new Error('Copy command failed');
+            }
+        } catch (err) {
+            // Error feedback
+            copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-6 h-6"><path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Error';
+            copyButton.style.backgroundColor = '#ef4444';
+        }
+        
+        // Reset after 2 seconds for fallback
+        setTimeout(function() {
+            copyButton.innerHTML = originalButtonText;
+            copyButton.style.backgroundColor = '#7C39FF';
+        }, 2000);
+    }
+}
         </script>
         <a href="/app/index.html" class="claim-now-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: linear-gradient(135deg, #FA0, #FF6B00); color: white; font-weight: bold; padding: 15px 25px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 20px rgba(255, 170, 0, 0.4); transition: all 0.3s ease; animation: pulse 2s infinite;">CLAIM NOW</a>
         <style>.claim-now-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255, 170, 0, 0.6); } @keyframes pulse { 0%, 100% { box-shadow: 0 4px 20px rgba(255, 170, 0, 0.4); } 50% { box-shadow: 0 6px 30px rgba(255, 170, 0, 0.8); } }</style>
